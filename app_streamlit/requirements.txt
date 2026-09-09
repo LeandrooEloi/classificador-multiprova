@@ -1,0 +1,5 @@
+streamlit
+streamlit-mnist-canvas
+scikit-learn
+numpy
+joblib
