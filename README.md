@@ -1,6 +1,7 @@
 # Classificador de 1 a 5, V/F, A-E
 
 Notebook executável no Colab: https://colab.research.google.com/drive/1eb-8zUvCd8Yodb9jVZNxzrnl3XtcrIJu?usp=sharing
+Link render dashboard: https://classificador-multiprova.onrender.com
 
 ## O que tem aqui
 
