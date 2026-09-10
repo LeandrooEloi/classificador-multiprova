@@ -12,6 +12,7 @@ Antes de rodar, copie para esta pasta os 3 arquivos gerados no notebook:
 """
 
 from io import BytesIO
+from pathlib import Path
 
 import numpy as np
 import streamlit as st
@@ -23,12 +24,17 @@ st.set_page_config(page_title="Corretor de Multiprova", layout="wide")
 st.title("Corretor de Multiprova")
 st.caption("Desenhe no canvas e clique em enviar: cada quadro aciona o classificador correspondente.")
 
+# Pasta deste arquivo: os .joblib são carregados por caminho absoluto para não
+# depender do diretório de onde o `streamlit run` foi disparado (isso muda
+# conforme o serviço de hospedagem).
+PASTA_APP = Path(__file__).resolve().parent
+
 
 @st.cache_resource
 def carregar_modelos():
-    modelo_vf = joblib.load("modelo_binario_VF.joblib")
-    modelo_15 = joblib.load("modelo_multiclasse_1a5.joblib")
-    modelo_ae = joblib.load("modelo_multiclasse_AaE.joblib")
+    modelo_vf = joblib.load(PASTA_APP / "modelo_binario_VF.joblib")
+    modelo_15 = joblib.load(PASTA_APP / "modelo_multiclasse_1a5.joblib")
+    modelo_ae = joblib.load(PASTA_APP / "modelo_multiclasse_AaE.joblib")
     return modelo_vf, modelo_15, modelo_ae
 
 

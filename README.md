@@ -39,6 +39,37 @@ Notebook executável no Colab: https://colab.research.google.com/drive/1eb-8zUvC
 Leve o notebook executado (com as saídas) + o app rodando localmente, conforme pedido
 no enunciado ("apresentar o código e a execução do data app presencial em sala").
 
+### 4. Publicar no Streamlit Community Cloud
+1. Confirme que o repositório está no GitHub com os 3 `.joblib` versionados dentro de
+   `app_streamlit/` (eles já estão neste repo — arquivos binários de modelo não são
+   ignorados pelo `.gitignore`).
+2. Acesse https://share.streamlit.io e clique em "New app".
+3. Selecione este repositório, branch `main` e em **Main file path** informe
+   `app_streamlit/app.py`.
+4. O Streamlit Cloud detecta automaticamente o `app_streamlit/requirements.txt`
+   (fica na mesma pasta do app) e instala as dependências, já fixadas nas versões
+   usadas para treinar os modelos (`scikit-learn==1.6.1`), evitando erro de
+   incompatibilidade ao carregar os `.joblib`.
+5. Clique em "Deploy". O app usa caminho absoluto (baseado em `__file__`) para achar
+   os `.joblib`, então funciona independente do diretório de onde o Streamlit Cloud
+   executa o processo.
+6. Se atualizar os modelos, copie os novos `.joblib` para `app_streamlit/`, faça commit/push
+   — o Streamlit Cloud reimplanta automaticamente a cada push na branch conectada.
+
+### 5. Alternativa: publicar no Render
+Este repo já tem um [`render.yaml`](render.yaml) (Blueprint) configurado. Passo a passo:
+1. Faça push do repo para o GitHub.
+2. Em https://dashboard.render.com, clique em **New > Blueprint** e selecione este repositório.
+   O Render lê o `render.yaml` automaticamente e já configura:
+   - diretório raiz do serviço: `app_streamlit/` (onde estão o `app.py` e o `requirements.txt`);
+   - build: `pip install -r requirements.txt`;
+   - start: `streamlit run app.py --server.port $PORT --server.address 0.0.0.0 --server.headless true ...`
+     (o Render define a porta pela variável `$PORT`, diferente do Streamlit Cloud).
+3. Confirme o plano (o `free` funciona, mas "dorme" após inatividade e demora ~1 min para
+   acordar na primeira visita) e clique em **Apply**.
+4. Sem Blueprint, dá para criar manualmente um **Web Service** apontando pasta raiz para
+   `app_streamlit`, com o mesmo build/start command acima.
+
 ## Decisões de projeto (para você justificar na entrega)
 
 - **V/F** foi montado com as letras `V` e `F` do split `letters` do EMNIST.
